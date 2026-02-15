@@ -1,15 +1,84 @@
-# CGH-StyleGAN
+<img width="1139" height="549" alt="スクリーンショット 2026-02-15 15 52 22" src="https://github.com/user-attachments/assets/6ccc6017-a70a-45f4-8daa-39e536aae960" /># Unconditional Hologram Generation with StyleGAN2
 
-**ホログラム生成のためのStyleGAN2実装**
+**深層生成モデルStyleGAN2を用いた計算機合成ホログラフィ(CGH)の無条件生成**
 
-計算機合成ホログラム（CGH: Computer-Generated Hologram）を深層学習で生成するための研究プロジェクトです。StyleGAN2アーキテクチャをベースに、物理ベースのホログラムシミュレータを組み込むことで、高品質なホログラムパターンを生成します。
+[![PyTorch](https://img.shields.io/badge/PyTorch-v1.x-ee4c2c?logo=pytorch)](https://pytorch.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## 概要
+
+本リポジトリは、**StyleGAN2**を用いて計算機合成ホログラフィ（CGH）を生成するPyTorch実装です。
+
+従来の深層学習ベースのCGH生成手法の多くは、2次元画像（透視画像や深度画像）を入力とする「条件付き生成」であり、3次元情報の欠落や近似が課題でした。
+本研究では、ホログラムの干渉縞を一種のテクスチャとみなし、乱数から直接ホログラムを生成する**無条件生成モデル**を提案します。
+
+さらに、ホログラム画像だけでなく、物理シミュレーションによる**再生像の品質も同時に評価するMulti-Discriminator構成**を導入し、光学的に妥当な干渉縞の獲得を目指しました。
+
+<p align="center">
+  <img src="deep-cgh-fig/flow.png" width="600" alt="Overall Architecture">
+</p>
 
 ## 特徴
 
-- **物理ベースシミュレータ**: Angular Spectrum法に基づく微分可能なホログラムシミュレータ
-- **デュアルDiscriminator**: CGHパターンと再生像の両方を評価
-- **Mixed Precision Training**: bf16/fp16による高速学習
-- **マルチGPU対応**: Accelerateによる分散学習サポート
+* **無条件生成 (Unconditional Generation)**:
+    * 特定の物体画像を入力とせず、潜在変数 $z$ (乱数) から多様なホログラムパターンを生成。
+* **微分可能ホログラムシミュレータ (Differentiable Hologram Simulator)**:
+    * PyTorch上でフレネル回折計算（FFTベース）を実装。
+    * 生成器から再生像評価まで誤差逆伝播が可能。
+* **Multi-Discriminator Architecture**:
+    * **$D_{holo}$**: 生成された干渉縞パターンの統計的性質を評価。
+    * **$D_{rec}$**: シミュレータを経て得られた再生像の光学的整合性を評価。
+
+## 手法
+
+### ネットワークアーキテクチャ
+基盤モデルには高解像度画像生成に優れた **StyleGAN2** を採用しています。Generatorは $4 \times 4$ から段階的に解像度を上げ、$512 \times 512$ の干渉縞画像を生成します。
+
+学習は **WGAN-GP** の枠組みに基づき、以下の損失関数を最小化します。
+
+$$
+\mathcal{L}_{G} = -\lambda_{\mathrm{holo}} \cdot \mathbb{E}[D_{\mathrm{holo}}(G(z))] - \lambda_{\mathrm{rec}} \cdot \mathbb{E}[D_{\mathrm{rec}}(\mathrm{Sim}(G(z)))]
+$$
+
+ここで、$\mathrm{Sim}(\cdot)$ は回折シミュレータを表します。提案手法（実験2）では $\lambda_{\mathrm{rec}}$ を有効化し、再生像の品質をフィードバックさせます。
+
+### データセット
+高知大学 高田研究室により開発されたアルゴリズムを用い、15種類の3D点群データ（bunny, earth, chess等）から生成されたCGH画像を使用しています。
+
+* **総枚数**: 9,300枚
+* **パラメータ**: 波長 $\lambda=486$ nm, 記録距離 $z=0.5$ m
+* **前処理**: グレースケール化および $[-1, 1]$ への正規化
+
+<p align="center">
+  <img src="deep-cgh-fig/CGH_Generation_Pipeline.png" width="400" alt="Dataset Generation">
+</p>
+
+## 実験結果
+
+### 生成画像の推移
+学習が進むにつれて、ホログラム特有の高周波な干渉縞パターンが獲得されていることが確認できます。
+
+![Results Exp1](results-fig/binary_ex1.png)
+
+### 再生像シミュレーション
+生成されたホログラムに対して数値再生を行った結果です。
+
+* **Baseline (Single Discriminator)**: 物体光と共役光が分離せず散らばっている。
+* **Proposed (Multi-Discriminator)**: 物体光の局在性が向上し、共役像との分離傾向が見られた。
+
+| 実験1 (Baseline) | 実験2 (Proposed) |
+| :---: | :---: |
+| ![Recon Exp1](results-fig/recon_exp1_cgh_full.png) | ![Recon Exp2](results-fig/recon_exp2_cgh_full.png) |
+| 全体的に散乱 | **物体光の局在を確認** |
+
+※ 現状では明瞭な結像には至っておらず、位相情報の欠落などが課題として挙げられます。
+
+## 動作環境
+
+* Python 3.8+
+* PyTorch 1.10+
+* NVIDIA GPU (Recommended: RTX 3090 x2 for training)
+* CUDA Toolkit
 
 ## ディレクトリ構成
 
