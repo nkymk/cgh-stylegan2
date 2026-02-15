@@ -1,4 +1,4 @@
-<img width="1139" height="549" alt="スクリーンショット 2026-02-15 15 52 22" src="https://github.com/user-attachments/assets/6ccc6017-a70a-45f4-8daa-39e536aae960" /># Unconditional Hologram Generation with StyleGAN2
+# Unconditional Hologram Generation with StyleGAN2
 
 **深層生成モデルStyleGAN2を用いた計算機合成ホログラフィ(CGH)の無条件生成**
 
