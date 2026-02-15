@@ -2,9 +2,6 @@
 
 **深層生成モデルStyleGAN2を用いた計算機合成ホログラフィ(CGH)の無条件生成**
 
-[![PyTorch](https://img.shields.io/badge/PyTorch-v1.x-ee4c2c?logo=pytorch)](https://pytorch.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 ## 概要
 
 - 本リポジトリは、**StyleGAN2**を用いて計算機合成ホログラフィ（CGH）を生成するPyTorch実装です。
