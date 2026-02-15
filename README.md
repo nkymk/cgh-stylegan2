@@ -60,8 +60,8 @@ $$
 ### 再生像シミュレーション
 生成されたホログラムに対して数値再生を行った結果です。
 
-* **実験1 (Single Discriminator)**: 物体光と共役光が分離せず散らばっている。
-* **実験2 (Multi-Discriminator)**: 物体光の局在性が向上し、共役像との分離傾向が見られた。
+* **実験1 (Single Discriminator)**: 物体光と共役光が分離せず拡散
+* **実験2 (Multi-Discriminator)**: 物体光の局在性が向上し、共役像との分離傾向
 
 <img width="1291" height="599" alt="image" src="https://github.com/user-attachments/assets/c58b9c3c-8947-4369-8fbd-b59033dcca35" />
 
