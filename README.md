@@ -49,6 +49,10 @@ $$
 
 <img width="1293" height="632" alt="image" src="https://github.com/user-attachments/assets/7e3e3ac6-1870-4c7a-a458-445b28935f6b" />
 
+## 実験条件
+
+<img width="1006" height="540" alt="image" src="https://github.com/user-attachments/assets/7ccde90a-6d52-491b-aae1-ded5aa107afc" />
+
 
 ## 実験結果
 
