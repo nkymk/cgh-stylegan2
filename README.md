@@ -14,7 +14,7 @@
 
 さらに、ホログラム画像だけでなく、物理シミュレーションによる**再生像の品質も同時に評価するMulti-Discriminator構成**を導入し、光学的に妥当な干渉縞の獲得を目指しました。
 
-
+<img width="692" height="562" alt="image" src="https://github.com/user-attachments/assets/95058602-db83-4da9-b53e-10236398d0a8" />
 
 ## 特徴
 
@@ -30,7 +30,7 @@
 ## 手法
 
 ### ネットワークアーキテクチャ
-基盤モデルには高解像度画像生成に優れた **StyleGAN2** を採用しています。Generatorは $4 \times 4$ から段階的に解像度を上げ、$512 \times 512$ の干渉縞画像を生成します。
+基盤モデルには高解像度画像生成に優れた **StyleGAN2** を採用しています。Generatorは $4 \times 4$ から段階的に解像度を上げ、 $512 \times 512$ の干渉縞画像を生成します。
 
 学習は **WGAN-GP** の枠組みに基づき、以下の損失関数を最小化します。
 
@@ -38,14 +38,16 @@ $$
 \mathcal{L}_{G} = -\lambda_{\mathrm{holo}} \cdot \mathbb{E}[D_{\mathrm{holo}}(G(z))] - \lambda_{\mathrm{rec}} \cdot \mathbb{E}[D_{\mathrm{rec}}(\mathrm{Sim}(G(z)))]
 $$
 
-ここで、$\mathrm{Sim}(\cdot)$ は回折シミュレータを表します。提案手法（実験2）では $\lambda_{\mathrm{rec}}$ を有効化し、再生像の品質をフィードバックさせます。
+ここで、 $\mathrm{Sim}(\cdot)$ は回折シミュレータを表します。提案手法（実験2）では $\lambda_{\mathrm{rec}}$ を有効化し、再生像の品質をフィードバックさせます。
+
+<img width="1322" height="482" alt="image" src="https://github.com/user-attachments/assets/abe4ea97-c1e7-4cd7-afe2-8868ada870ba" />
 
 ### データセット
 高知大学 高田研究室により開発されたアルゴリズムを用い、15種類の3D点群データ（bunny, earth, chess等）から生成されたCGH画像を使用しています。
 
-* **総枚数**: 9,300枚
-* **パラメータ**: 波長 $\lambda=486$ nm, 記録距離 $z=0.5$ m
-* **前処理**: グレースケール化および $[-1, 1]$ への正規化
+<img width="1313" height="592" alt="image" src="https://github.com/user-attachments/assets/99cc2c46-132f-4b1a-861d-323107ea962a" />
+
+<img width="1293" height="632" alt="image" src="https://github.com/user-attachments/assets/7e3e3ac6-1870-4c7a-a458-445b28935f6b" />
 
 
 ## 実験結果
@@ -53,6 +55,7 @@ $$
 ### 生成画像の推移
 学習が進むにつれて、ホログラム特有の高周波な干渉縞パターンが獲得されていることが確認できます。
 
+<img width="1159" height="528" alt="image" src="https://github.com/user-attachments/assets/ba7dafaf-3eec-4308-a537-d9032791655a" />
 
 
 ### 再生像シミュレーション
@@ -61,6 +64,7 @@ $$
 * **Baseline (Single Discriminator)**: 物体光と共役光が分離せず散らばっている。
 * **Proposed (Multi-Discriminator)**: 物体光の局在性が向上し、共役像との分離傾向が見られた。
 
+<img width="1291" height="599" alt="image" src="https://github.com/user-attachments/assets/c58b9c3c-8947-4369-8fbd-b59033dcca35" />
 
 
 ※ 現状では明瞭な結像には至っておらず、位相情報の欠落などが課題として挙げられます。
@@ -92,12 +96,6 @@ cgh-stylegan/
 ```
 
 ## セットアップ
-
-### 要件
-
-- Python 3.8+
-- CUDA 11.0+ (GPU学習の場合)
-- PyTorch 2.0+
 
 ### インストール
 
@@ -191,44 +189,3 @@ dataset/
         ├── image002.bmp
         └── ...
 ```
-
-※ グレースケール画像を使用してください。
-
-## 技術詳細
-
-### ホログラムシミュレータ
-
-Angular Spectrum法に基づく光波伝播シミュレーション：
-
-1. **FFTベースの実装**: PyTorchのFFTを使用し、完全に微分可能
-2. **自然サンプリング**: エイリアシングを防ぐため、適切なサイズにパディング
-3. **fp32計算**: FFTの精度維持のため、常にfp32で計算
-
-### デュアルDiscriminator構成
-
-- **critic_holo**: CGHパターン（入力ホログラム）を評価
-- **critic_rec**: 再生像（シミュレーション結果）を評価
-
-両方のDiscriminatorからのフィードバックにより、物理的に妥当なホログラムパターンが生成されます。
-
-## 引用
-
-このコードを使用した場合は、以下を引用してください：
-
-```bibtex
-@article{your-paper,
-  title={Your Paper Title},
-  author={Your Name},
-  journal={Journal Name},
-  year={2026}
-}
-```
-
-## ライセンス
-
-MIT License
-
-## 謝辞
-
-- [StyleGAN2](https://github.com/NVlabs/stylegan2) - NVIDIA
-- [Accelerate](https://github.com/huggingface/accelerate) - Hugging Face
