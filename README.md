@@ -1,6 +1,6 @@
 # Unconditional Hologram Generation with StyleGAN2
 
-**深層生成モデルStyleGAN2を用いた計算機合成ホログラフィ(CGH)の無条件生成**
+**StyleGAN2を用いた計算機合成ホログラフィの無条件生成**
 
 ## 概要
 
