@@ -87,7 +87,7 @@ cgh-stylegan/
 ├── generate.py            # 画像生成スクリプト
 └── src/                   # ソースコード
     ├── __init__.py
-    ├── simulator.py       # ホログラムシミュレータ（コア技術）
+    ├── simulator.py       # ホログラムシミュレータ
     ├── models.py          # Generator, Discriminator, MappingNetwork
     ├── layers.py          # StyleGAN2のビルディングブロック
     ├── dataset.py         # DataLoader
