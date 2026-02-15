@@ -8,10 +8,8 @@
 ## 概要
 
 本リポジトリは、**StyleGAN2**を用いて計算機合成ホログラフィ（CGH）を生成するPyTorch実装です。
-
 従来の深層学習ベースのCGH生成手法の多くは、2次元画像（透視画像や深度画像）を入力とする「条件付き生成」であり、3次元情報の欠落や近似が課題でした。
 本研究では、ホログラムの干渉縞を一種のテクスチャとみなし、乱数から直接ホログラムを生成する**無条件生成モデル**を提案します。
-
 さらに、ホログラム画像だけでなく、物理シミュレーションによる**再生像の品質も同時に評価するMulti-Discriminator構成**を導入し、光学的に妥当な干渉縞の獲得を目指しました。
 
 <img width="692" height="562" alt="image" src="https://github.com/user-attachments/assets/95058602-db83-4da9-b53e-10236398d0a8" />
@@ -30,15 +28,15 @@
 ## 手法
 
 ### ネットワークアーキテクチャ
-基盤モデルには高解像度画像生成に優れた **StyleGAN2** を採用しています。Generatorは $4 \times 4$ から段階的に解像度を上げ、 $512 \times 512$ の干渉縞画像を生成します。
-
+基盤モデルには高解像度画像生成に優れた **StyleGAN2** を採用しています。
+Generatorは $4 \times 4$ から段階的に解像度を上げ、 $512 \times 512$ の干渉縞画像を生成します。
 学習は **WGAN-GP** の枠組みに基づき、以下の損失関数を最小化します。
 
 $$
 \mathcal{L}_{G} = -\lambda_{\mathrm{holo}} \cdot \mathbb{E}[D_{\mathrm{holo}}(G(z))] - \lambda_{\mathrm{rec}} \cdot \mathbb{E}[D_{\mathrm{rec}}(\mathrm{Sim}(G(z)))]
 $$
 
-ここで、 $\mathrm{Sim}(\cdot)$ は回折シミュレータを表します。提案手法（実験2）では $\lambda_{\mathrm{rec}}$ を有効化し、再生像の品質をフィードバックさせます。
+ここで、 $\mathrm{Sim}(\cdot)$ は回折シミュレータを表します。
 
 <img width="1322" height="482" alt="image" src="https://github.com/user-attachments/assets/abe4ea97-c1e7-4cd7-afe2-8868ada870ba" />
 
@@ -65,8 +63,8 @@ $$
 ### 再生像シミュレーション
 生成されたホログラムに対して数値再生を行った結果です。
 
-* **Baseline (Single Discriminator)**: 物体光と共役光が分離せず散らばっている。
-* **Proposed (Multi-Discriminator)**: 物体光の局在性が向上し、共役像との分離傾向が見られた。
+* **実験1 (Single Discriminator)**: 物体光と共役光が分離せず散らばっている。
+* *実験2 (Multi-Discriminator)**: 物体光の局在性が向上し、共役像との分離傾向が見られた。
 
 <img width="1291" height="599" alt="image" src="https://github.com/user-attachments/assets/c58b9c3c-8947-4369-8fbd-b59033dcca35" />
 
