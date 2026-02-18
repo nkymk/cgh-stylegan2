@@ -75,46 +75,6 @@ $$
 * NVIDIA GPU (Recommended: RTX 3090 x2 for training)
 * CUDA Toolkit
 
-## ディレクトリ構成
-
-```
-cgh-stylegan2/
-├── README.md               # このファイル
-├── requirements.txt        # 依存ライブラリ
-├── .gitignore             # Git除外設定
-├── config.py              # デフォルト設定値
-├── train.py               # 学習スクリプト
-└── src/                   # ソースコード
-    ├── __init__.py
-    ├── simulator.py       # ホログラムシミュレータ
-    ├── models.py          # Generator, Discriminator, MappingNetwork
-    ├── layers.py          # StyleGAN2のビルディングブロック
-    ├── dataset.py         # DataLoader
-    └── loss.py            # 損失関数
-```
-
-
-## 使い方
-
-### 学習
-
-```bash
-# シングルGPU
-python train.py --dataset_path /path/to/your/data
-
-# マルチGPU (2GPU)
-accelerate launch --num_processes=2 train.py --dataset_path /path/to/your/data
-
-# カスタム設定
-python train.py \
-    --dataset_path /path/to/data \
-    --output_dir ./outputs \
-    --epochs 300 \
-    --batch_size 6 \
-    --lr 1e-4 \
-    --mixed_precision bf16
-```
-
 ### 主なオプション
 
 | オプション | 説明 | デフォルト |
@@ -132,36 +92,20 @@ python train.py \
 
 全オプションは `python train.py --help` で確認できます。
 
-## シミュレータの単体使用
-
-ホログラムシミュレータは独立したモジュールとして使用可能です：
-
-```python
-import torch
-from src.simulator import TorchHologramSimulator, simulate_hologram_batch
-
-# シミュレータの初期化
-simulator = TorchHologramSimulator(
-    image_shape=512,
-    distance=0.5,           # 伝播距離 [m]
-    pitch=7.56e-6,          # ピクセルピッチ [m]
-    wave_length=486e-9,     # 波長 [m]
-)
-
-# ホログラムから再生像をシミュレート
-hologram = torch.randn(1, 1, 512, 512)  # (B, C, H, W)
-reconstructed = simulate_hologram_batch(hologram, simulator)
-```
-
-## データセット形式
-
-ImageFolderフォーマットを使用：
+## ディレクトリ構成
 
 ```
-dataset/
-└── train/
-    └── class_name/
-        ├── image001.bmp
-        ├── image002.bmp
-        └── ...
+cgh-stylegan2/
+├── README.md               # このファイル
+├── requirements.txt        # 依存ライブラリ
+├── .gitignore             # Git除外設定
+├── config.py              # デフォルト設定値
+├── train.py               # 学習スクリプト
+└── src/                   # ソースコード
+    ├── __init__.py
+    ├── simulator.py       # ホログラムシミュレータ
+    ├── models.py          # Generator, Discriminator, MappingNetwork
+    ├── layers.py          # StyleGAN2のビルディングブロック
+    ├── dataset.py         # DataLoader
+    └── loss.py            # 損失関数
 ```
