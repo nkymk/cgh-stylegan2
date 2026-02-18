@@ -78,13 +78,12 @@ $$
 ## ディレクトリ構成
 
 ```
-cgh-stylegan/
+cgh-stylegan2/
 ├── README.md               # このファイル
 ├── requirements.txt        # 依存ライブラリ
 ├── .gitignore             # Git除外設定
 ├── config.py              # デフォルト設定値
 ├── train.py               # 学習スクリプト
-├── generate.py            # 画像生成スクリプト
 └── src/                   # ソースコード
     ├── __init__.py
     ├── simulator.py       # ホログラムシミュレータ
@@ -100,8 +99,8 @@ cgh-stylegan/
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/your-username/cgh-stylegan.git
-cd cgh-stylegan
+git clone https://github.com/your-username/cgh-stylegan2.git
+cd cgh-stylegan2
 
 # 依存ライブラリのインストール
 pip install -r requirements.txt
@@ -126,16 +125,6 @@ python train.py \
     --batch_size 6 \
     --lr 1e-4 \
     --mixed_precision bf16
-```
-
-### 画像生成
-
-```bash
-# 学習済みモデルから画像生成
-python generate.py \
-    --checkpoint_path ./checkpoints/model.pt \
-    --output_dir ./generated \
-    --num_samples 100
 ```
 
 ### 主なオプション
