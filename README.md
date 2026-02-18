@@ -93,18 +93,6 @@ cgh-stylegan2/
     └── loss.py            # 損失関数
 ```
 
-## セットアップ
-
-### インストール
-
-```bash
-# リポジトリのクローン
-git clone https://github.com/your-username/cgh-stylegan2.git
-cd cgh-stylegan2
-
-# 依存ライブラリのインストール
-pip install -r requirements.txt
-```
 
 ## 使い方
 
